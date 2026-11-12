@@ -130,20 +130,28 @@ public class RigidbodyCharacterController : MonoBehaviour
     /// </summary>
     private void MoveCharacter()
     {
-        // Convert the input into a direction relative to the character's facing direction.
-        Vector3 moveDirection =
-            transform.right * moveInput.x +
-            transform.forward * moveInput.y;
+        Vector3 moveDirection = Vector3.zero;
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
+        {
 
-        // Prevent diagonal input from moving faster than forward input.
-        moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
+            // Convert the input into a direction relative to the character's facing direction.
+            // moveDirection =
+            //    transform.right * moveInput.x +
+            //    transform.forward * moveInput.y;
+
+
+            // Prevent diagonal input from moving faster than forward input.
+            // moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
+
+            transform.rotation = Quaternion.LookRotation(moveInput);
+        }
 
         // Keep the current vertical velocity so gravity and jumping continue to work.
         Vector3 velocity = rb.linearVelocity;
 
         // Set the horizontal velocity. Unity handles the vertical movement separately.
-        velocity.x = moveDirection.x * moveSpeed;
-        velocity.z = moveDirection.z * moveSpeed;
+        // velocity.x = moveDirection.x * moveSpeed;
+        velocity.z = Mathf.Abs(moveInput.magnitude * moveSpeed);
 
         rb.linearVelocity = velocity;
     }
